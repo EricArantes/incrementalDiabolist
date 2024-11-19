@@ -1,0 +1,367 @@
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+*{
+    user-select: none;
+    overflow: hidden;
+}
+
+.night-sky{
+
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+
+    background-color: black;
+
+}
+
+.player-panel{
+    height: 30vw;
+    width: 35vw;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    
+
+    background-color: transparent;
+    border: 0.1em solid white;
+    border-radius: 1%;
+    gap: 0.1em;
+
+
+}
+
+.tooltip-box{
+    height: 10vh;
+    width: 35vw;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: transparent;
+    border: 0.1em solid yellow;
+    border-radius: 1%;
+    gap: 0.1em;
+    transition: all .6s ease;
+    opacity: 0;
+
+}
+
+.player-resources{
+    width: 100vw;
+    height: 5vh;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+    border: 0.1em solid white;
+    border-bottom: none;
+    padding: 0.2em;
+    background-color: transparent;
+    color: white;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+
+}
+
+.resource{
+    height: fit-content;
+    width: fit-content;
+
+    color: yellow;
+
+    opacity: 1;
+    font-size: 1em;
+
+    margin-left: 0.25em;
+}
+
+.demon{
+    height: 95%;
+    width: 95%;
+
+    align-self: center;
+    justify-self: center;
+
+    border: 0.1em solid white;
+    padding: 0.01em;
+    border-radius: 1%;
+
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 85% 10%;
+    gap: 0.2em;
+}
+
+#canvas{
+    background-color: transparent;
+}
+
+.star{
+    position: fixed;
+    opacity: 0.5;
+}
+
+.star:hover{
+    cursor: pointer;
+    filter: brightness(1.5);
+}
+
+.star:active{
+    transform: translate(1px);
+}
+
+.demon-panel{
+    position: fixed;
+
+    background-color: black;
+
+    border: 0.1em solid white;
+    border-radius: 1%;
+    transition: all 0.8s ease;
+
+    width: 18em;
+    height: 29em;
+
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 45% 5% 5% 45%;
+
+
+}
+
+.demon-icon{
+    min-width: 50%;
+    min-height: 80%;
+    height: fit-content;
+
+    justify-self: center;
+    align-self: center;
+
+    border: 0.1em solid white;
+}
+
+.demon-title{
+    width: fit-content;
+    height: fit-content;
+
+    justify-self: center;
+    align-self: center;
+
+    color: white;
+
+
+}
+
+.demon-abilities{
+    width: fit-content;
+    height: fit-content;
+
+    justify-self: center;
+    align-self: center;
+
+    color: yellow;
+
+}
+
+.demon-kind{
+    width: fit-content;
+    height: fit-content;
+
+    justify-self: center;
+    align-self: center;
+
+    color: red;
+
+}
+
+.dismiss-button{
+    width: 8em;
+    height: 2em;
+
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+    border: 0.1em solid white;
+
+    border-radius: 10%;
+    background-color: black;
+
+    transition: none;
+
+}
+
+.dismiss-button:hover{
+    cursor: pointer;
+    filter: brightness(1.5);
+}
+
+.dismiss-button:active{
+    transition: none;
+    transform: translateY(1px);
+}
+
+.beckon-button{
+    width: 8em;
+    height: 2em;
+
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+    border: 0.1em solid white;
+
+    border-radius: 10%;
+    background-color: black;
+
+    transition: none;
+
+}
+
+.beckon-button:hover{
+    cursor: pointer;
+    filter: brightness(1.5);
+}
+
+.beckon-button:active{
+    transition: none;
+    transform: translateY(1px);
+}
+
+
+.demon-icon{
+    height: 90%;
+    width: fit-content;
+
+    padding: 0.1em;
+    background-color: transparent;
+}
+
+.demon-in-panel{
+    height: 95%;
+    width: 95%;
+
+    align-self: center;
+    justify-self: center;
+
+    border: 0.1em solid white;
+    padding: 0.01em;
+    border-radius: 1%;
+
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 85% 10%;
+    overflow: visible;
+    gap: 0.2em;
+
+    background-repeat: no-repeat;
+
+}
+
+.demon-in-panel:hover{
+    cursor: pointer;
+}
+
+.demon-in-panel:active{
+    transform: translateY(2px);
+    filter: brightness(1.5);
+}
+
+.demon-in-panel-img{
+
+    width: 90%;
+    height: fit-content;
+
+    justify-self: center;
+    align-self: center;
+
+    border: 1px solid white;
+    border-radius: 3px;
+
+}
+
+.demon-in-panel-charges{
+    width: 90%;
+    height: 100%;
+
+    padding-bottom: 0.2em;
+
+    justify-self: center;
+    align-self: center;
+
+    text-align: center;
+    color: yellow;
+}
+
+
+.progress-bar-demon{
+    height: 100%;
+    width: 100%;
+
+    background-color: yellow;
+    filter: opacity(0.5);
+
+}
