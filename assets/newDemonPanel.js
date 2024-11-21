@@ -180,7 +180,7 @@ function beckonDemon(demon){
     Player["Demons"].push(demonToPush)
     loseLife(demon["tier"])
 
-    populateDemonsPanel()
+    updateDemonsPanel()
 
 }
 

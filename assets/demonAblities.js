@@ -1,6 +1,8 @@
 function activateDemon(demon){
     var isActive = demon["isActive"]
 
+
+
     if(isActive){
         return
     }else{
@@ -51,9 +53,6 @@ function activateDemon(demon){
         if(drainCharge){
             if(typeof demon["charges"] == "number"){
                 demon["charges"] -= 1
-                if(demon["charges"] <= 0){
-                    Player.Demons.splice(Player.Demons.indexOf(demon), 1)
-                }
             }
         }
 
@@ -61,7 +60,9 @@ function activateDemon(demon){
     
     
         populateResourceBar()
-        populateDemonsPanel()
+        updateDemonsPanel()
+        tickDemon(demon)
+
 
     }
 

@@ -26,6 +26,74 @@ function populateResourceBar(){
 
 }
 
+function updateDemonsPanel(){
+    const playerPanel = document.getElementById("player-panel")
+
+    Player.Demons.forEach(item => {
+
+        const thisDemon = document.getElementById(item["summonId"])
+
+        if(thisDemon === null){
+            const newDemon = document.createElement("div")
+            const icon = document.createElement("img")
+            const charges = document.createElement("div")
+    
+            newDemon.classList.add("demon-in-panel")
+            icon.classList.add("demon-in-panel-img")
+            charges.classList.add("demon-in-panel-charges")
+    
+            icon.src = item["img"]
+            charges.textContent = item["charges"]
+    
+            newDemon.appendChild(icon)
+            newDemon.appendChild(charges)
+    
+            newDemon.id = item["summonId"]
+            charges.id = "charges-" + item["summonId"]
+        
+            playerPanel.appendChild(newDemon)
+    
+            if(item["isActive"]){
+    
+                newDemon.style.scale = "0.95"
+                newDemon.style.filter = "brightness(0.7)"
+    
+            }
+        
+            if(item["type"] === "Active"){
+                newDemon.addEventListener("click", () => { activateDemon(item) })
+            }
+    
+            newDemon.addEventListener("mouseover", () => {
+                showTooltip(item)
+            })
+    
+            newDemon.addEventListener("mouseout", () => {
+                document.querySelector(".tooltip-box").style.opacity = "0"
+            })
+    
+            if(item["charges"] <= 0){
+                newDemon.remove()
+            }
+        }
+        else{
+            
+            const thisDemoncharges = document.getElementById("charges-" + item["summonId"])
+            thisDemoncharges.textContent = item["charges"]
+
+            if(item["charges"] <= 0){
+                thisDemon.remove()
+
+                Player.Demons.splice(Player.Demons.indexOf(item), 1)
+
+                document.querySelector(".tooltip-box").style.opacity = "0"
+                
+            }
+            
+        }
+    })
+}
+
 function populateDemonsPanel(){
     const playerPanel = document.getElementById("player-panel")
 
@@ -35,6 +103,7 @@ function populateDemonsPanel(){
 
 
     Player.Demons.forEach(item => {
+
         const newDemon = document.createElement("div")
         const icon = document.createElement("img")
         const charges = document.createElement("div")
@@ -55,16 +124,8 @@ function populateDemonsPanel(){
 
         if(item["isActive"]){
 
-            if(localStorage.getItem(item["summonId"]) === null){
-                newDemon.style.scale = "0.95"
-                newDemon.style.filter = "brightness(0.7)"
-    
-    
-                newDemon.style.backgroundColor = "grey"
-
-                tickDemon(item)
-            }
-
+            newDemon.style.scale = "0.95"
+            newDemon.style.filter = "brightness(0.7)"
 
         }
     
@@ -95,8 +156,20 @@ function tickDemon(demon){
     var isDone = false
     var tgtDemon = document.getElementById(demon["summonId"])
 
+    tgtDemon.style.scale = "0.95"
+    tgtDemon.style.filter = "brightness(0.7)"
+
+
+    tgtDemon.style.backgroundColor = "grey"
+
 
     var tickInterval = setInterval(() => {
+
+        tgtDemon.style.scale = "0.95"
+        tgtDemon.style.filter = "brightness(0.7)"
+    
+    
+        tgtDemon.style.backgroundColor = "grey"
 
         activeTime -= demon["speed"]
 
@@ -134,6 +207,7 @@ function tickDemon(demon){
 function killInterval(demonId){
     interval = localStorage.getItem(demonId)
     clearInterval(interval)
+    localStorage.removeItem(demonId)
 }
 
 
