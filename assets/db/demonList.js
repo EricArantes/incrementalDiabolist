@@ -4,22 +4,51 @@ const Products = [
         "name": "Life",
         "type": "count",
         "count": 0,
-        "traits:": ["essence", "life"]
+        "traits": ["essence", "life"]
     },
     {
         "id": 0,
         "name": "Cadaver",
         "type": "count",
         "count": 0,
-        "traits:": ["grim", "rot", "notorious"]
+        "traits": ["grim", "rot", "notorious"]
     },
     {
         "id": 0,
         "name": "Flies",
         "type": "count",
         "count": 0,
-        "traits:": [ "rot", "insect"]
-    }
+        "traits": [ "rot", "insect"]
+    },
+    {
+        "id": 0,
+        "name": "Greed",
+        "type": "count",
+        "count": 0,
+        "traits": ["emotion", "ego"]
+    },
+    {
+        "id": 0,
+        "name": "Ignorance",
+        "type": "count",
+        "count": 0,
+        "traits": ["emotion", "ego"]
+    },
+    {
+        "id": 0,
+        "name": "Confidence",
+        "type": "count",
+        "count": 0,
+        "traits": ["emotion", "ego"]
+    },
+    {
+        "id": 0,
+        "name": "Narcissism",
+        "type": "count",
+        "count": 0,
+        "traits": ["emotion", "ego", "pride"]
+    },
+    
 ]
 
 var productId = 0
@@ -38,6 +67,26 @@ function instanceOfProduct(productName){
     return x;
 }
 
+function randomByTraitLoose(traitList){
+
+    var randList = []
+
+    Products.forEach(item => {
+        traitList.forEach(trait => {
+            item["traits"].forEach(itemTrait => {
+                if(itemTrait == trait && !randList.includes(item)){
+                    randList.push(item)
+                }
+            })
+        })
+    })
+
+    const now = Date.now()
+    const index = now % randList.length
+
+    return randList[index]["name"]
+
+}
 
 
 const Demons = [
@@ -52,6 +101,20 @@ const Demons = [
         "exchange": [ {"product": "Life", "cost": 1 } ],
         "charges": 3,
         "speed": 50,
+        "isActive": false,
+        "img": ""
+    },
+    { //TODO: fix random product logic
+        "summonId": 0,
+        "name": "Ego Fiend",
+        "type": "Active",
+        "kind": "Masked Interloper",
+        "tier": 1,
+        "product": instanceOfProduct(randomByTraitLoose(["ego"])),
+        "power": 2,
+        "exchange": [ {"trait": "emotion", "cost": 1} ],
+        "charges": 12,
+        "speed": 300,
         "isActive": false,
         "img": ""
     },
@@ -72,6 +135,20 @@ blaugh = [
         "exchange": [ {"product": "Cadaver", "cost": 1 } ],
         "charges": 9,
         "speed": 150,
+        "isActive": false,
+        "img": ""
+    },
+    {
+        "summonId": 0,
+        "name": "Ego Fiend",
+        "type": "Active",
+        "kind": "Masked Interloper",
+        "tier": 1,
+        "product": instanceOfProduct("Flies"),
+        "power": 2,
+        "exchange": [ "emotion" ],
+        "charges": 12,
+        "speed": 300,
         "isActive": false,
         "img": ""
     },

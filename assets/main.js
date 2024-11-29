@@ -1,6 +1,6 @@
 var Player = {
     "Demons": [],
-    "Products": [{"name": "Life", "type": "count", "count": 50, "id": 0}]
+    "Products": [{"name": "Life", "type": "count", "count": 50, "traits": ["life"], "id": 0}, {"name": "Wroth", "type": "count", "count": 10, "traits": ["emotion", "id"],  "id": 23}]
 }
 
 function populateResourceBar(){
@@ -226,7 +226,12 @@ function showTooltip(demon){
     var description = ""
 
     demon["exchange"].forEach(item => {
-        description += item["cost"] + " " + item["product"]
+        if(item["product"] != null){
+            description += item["cost"] + " " + item["product"]
+        }
+        if(item["trait"] != null){
+            description += item["cost"] + " " + item["trait"]
+        }
     })
 
     description += " => " + demon["power"] + " " + demon["product"]["name"]

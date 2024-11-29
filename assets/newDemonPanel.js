@@ -24,7 +24,12 @@ function newDemonPanel(x, y){
     demonDescription = ""
 
     demon["exchange"].forEach(item => {
-        demonDescription += item["cost"] + " " + item["product"]
+        if(item["product"] != null){
+            demonDescription += item["cost"] + " " + item["product"]
+        }
+        if(item["trait"] != null){
+            demonDescription += item["cost"] + " " + item["trait"]
+        }
     })
 
     demonDescription += " => " + demon["power"] + " " + demon["product"]["name"]

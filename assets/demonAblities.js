@@ -1,8 +1,6 @@
 function activateDemon(demon){
     var isActive = demon["isActive"]
 
-
-
     if(isActive){
         return
     }else{
@@ -12,40 +10,55 @@ function activateDemon(demon){
         var grantExchange = false
     
     
-    
         if(demon["exchange"] != "None"){
             demon["exchange"].forEach(trade => {
-                Player.Products.forEach(item => {
-                    if(item["name"] == trade["product"]){
-                        if(item["count"] >= trade["cost"]){
-                            item["count"] -= trade["cost"]
-                            drainCharge = true
-                            grantExchange = true
+
+                if(trade["product"] != null){
+                    Player.Products.forEach(item => {
+                        if(item["name"] == trade["product"]){
+                            if(item["count"] >= trade["cost"]){
+                                item["count"] -= trade["cost"]
+                                drainCharge = true
+                                grantExchange = true
+                            }
                         }
-                    }
-                })
+                    })
+                }
+
+                if(trade["trait"] != null){
+                    var done = false
+                    Player.Products.forEach(item => {
+                        if(item["traits"].includes(trade["trait"]) && item["id"] != trade["id"] && !done){
+
+                            if(item["count"] >= trade["cost"]){
+                                item["count"] -= trade["cost"]
+                                drainCharge = true
+                                grantExchange = true
+                                done = true
+                            }
+                        }
+                    })
+                }
+
             }) 
     
         }
     
         if(grantExchange){
             if(demon["product"]["type"] == "count"){
-    
-                if(document.getElementById(productId + "-item")){
-                    Player.Products.forEach(item => {
-                        if(item["id"] == productId){
-                            item["count"] += demon["power"]
-                        }
-                    })
-                }
-                else{
+
+                if(document.getElementById(productId + "-item") == null){
                     Player.Products.push(demon["product"])
-                    Player.Products.forEach(item => {
-                        if(item["id"] == productId){
-                            item["count"] += demon["power"]
-                        }
-                    })
                 }
+
+                Player.Products.forEach(item => {
+                    if(item["id"] == productId){
+                        const sum = item["count"] + demon["power"]
+                        item["count"] = sum
+                    }
+                })
+
+                console.log(Player)
         
             }
         }
@@ -57,8 +70,7 @@ function activateDemon(demon){
         }
 
         demon["isActive"] = true
-    
-    
+
         populateResourceBar()
         updateDemonsPanel()
         tickDemon(demon)
