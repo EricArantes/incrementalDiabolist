@@ -258,5 +258,14 @@ function resetSky(){
     }
 }
 
+function swapActivePanel(newPanel){
+
+    document.getElementById("main-panel").remove()
+
+    document.getElementById("night-sky").appendChild(newPanel)
+
+
+}
+
 resetSky()
 populateResourceBar()

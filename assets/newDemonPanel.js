@@ -181,6 +181,7 @@ function beckonDemon(demon){
 
     var demonToPush = structuredClone(demon)
 
+
     demonToPush["summonId"] = Date.now()
     Player["Demons"].push(demonToPush)
     loseLife(demon["tier"])

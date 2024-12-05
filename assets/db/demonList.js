@@ -69,6 +69,8 @@ function instanceOfProduct(productName){
 
 function randomByTraitLoose(traitList){
 
+    //takes a long time to randomize the product, honestly might be good.
+
     var randList = []
 
     Products.forEach(item => {
@@ -104,13 +106,14 @@ const Demons = [
         "isActive": false,
         "img": ""
     },
-    { //TODO: fix random product logic
+    {
         "summonId": 0,
         "name": "Ego Fiend",
         "type": "Active",
         "kind": "Masked Interloper",
         "tier": 1,
         "product": instanceOfProduct(randomByTraitLoose(["ego"])),
+        "rand": ["ego"],
         "power": 2,
         "exchange": [ {"trait": "emotion", "cost": 1} ],
         "charges": 12,

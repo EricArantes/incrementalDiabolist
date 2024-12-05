@@ -71,6 +71,10 @@ function activateDemon(demon){
 
         demon["isActive"] = true
 
+        if(demon["rand"] != null){
+            randomizeDemonProduct_LooseTrait(demon)
+        }
+
         populateResourceBar()
         updateDemonsPanel()
         tickDemon(demon)
@@ -78,6 +82,21 @@ function activateDemon(demon){
 
     }
 
+
+
+}
+
+function randomizeDemonProduct_LooseTrait(demon){
+
+    const traitList = []
+
+    demon["rand"].forEach(item => {
+        traitList.push(item)
+    })
+
+    console.log(traitList)
+
+    demon["product"] = instanceOfProduct(randomByTraitLoose(traitList))
 
 
 }
