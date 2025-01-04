@@ -5,55 +5,72 @@ const Products = [
         "type": "count",
         "count": 0,
         "traits": ["essence", "life"]
+
     },
     {
         "id": 0,
-        "name": "Cadaver",
-        "type": "count",
-        "count": 0,
-        "traits": ["grim", "rot", "notorious"]
+        "summonId": 0,
+        "name": "Red Ichor",
+        "kind": "Diabolical Bloodstuff",
+        "type": "Item",
+        "traits": ["red rune"],
+        "charges": 0,
+        "img": ""
+
     },
     {
         "id": 0,
-        "name": "Flies",
-        "type": "count",
-        "count": 0,
-        "traits": [ "rot", "insect"]
+        "summonId": 0,
+        "name": "Iron Coin",
+        "kind": "Infernal Pentacle",
+        "type": "Item",
+        "traits": ["green rune"],
+        "charges": 0,
+        "img": ""
+
     },
     {
         "id": 0,
-        "name": "Greed",
-        "type": "count",
-        "count": 0,
-        "traits": ["emotion", "ego"]
+        "summonId": 0,
+        "name": "Weeping Stone",
+        "kind": "Hadean Pavement",
+        "type": "Item",
+        "traits": ["blue rune"],
+        "charges": 0,
+        "img": ""
+
     },
     {
         "id": 0,
-        "name": "Ignorance",
-        "type": "count",
-        "count": 0,
-        "traits": ["emotion", "ego"]
-    },
-    {
-        "id": 0,
-        "name": "Confidence",
-        "type": "count",
-        "count": 0,
-        "traits": ["emotion", "ego"]
-    },
-    {
-        "id": 0,
-        "name": "Narcissism",
-        "type": "count",
-        "count": 0,
-        "traits": ["emotion", "ego", "pride"]
+        "summonId": 0,
+        "name": "Red Key",
+        "kind": "Festering Passage",
+        "type": "Item",
+        "traits": ["key", "red wasteland"],
+        "charges": 0,
+        "img": ""
     },
     
 ]
 
+const CraftingRecipes = [
+
+    {
+        "id": 0,
+        "name": "Red Key",
+        "recipe": ["red rune", "red rune"],
+    }
+
+
+
+]
+
+
+
 var productId = 0
 Products.forEach(item => {
     item["id"] = productId
+    item["summonId"] = item["id"]
     productId += 1
 })
 
@@ -95,42 +112,23 @@ const Demons = [
     {
         "summonId": 0,
         "name": "Lesser Imp",
-        "type": "Active",
+        "type": "Demon",
         "kind": "Malevolent Whisper",
         "tier": 1,
-        "product": instanceOfProduct("Cadaver"),
-        "power": 1,
-        "exchange": [ {"product": "Life", "cost": 1 } ],
-        "charges": 3,
-        "speed": 50,
-        "isActive": false,
+        "product": "Red Ichor",
         "img": ""
     },
-    {
-        "summonId": 0,
-        "name": "Ego Fiend",
-        "type": "Active",
-        "kind": "Masked Interloper",
-        "tier": 1,
-        "product": instanceOfProduct(randomByTraitLoose(["ego"])),
-        "rand": ["ego"],
-        "power": 2,
-        "exchange": [ {"trait": "emotion", "cost": 1} ],
-        "charges": 12,
-        "speed": 300,
-        "isActive": false,
-        "img": ""
-    },
+
 
 
 ]
 
-
+/*
 blaugh = [
     {
         "summonId": 0,
         "name": "Unclean Beelze",
-        "type": "Active",
+        "type": "Demon",
         "kind": "Malodorous Spirit",
         "tier": 1,
         "product": instanceOfProduct("Flies"),
@@ -144,7 +142,7 @@ blaugh = [
     {
         "summonId": 0,
         "name": "Ego Fiend",
-        "type": "Active",
+        "type": "Demon",
         "kind": "Masked Interloper",
         "tier": 1,
         "product": instanceOfProduct("Flies"),
@@ -155,8 +153,30 @@ blaugh = [
         "isActive": false,
         "img": ""
     },
+    {
+        "summonId": 0,
+        "name": "Ego Fiend",
+        "type": "Demon",
+        "kind": "Masked Interloper",
+        "tier": 1,
+        "product": instanceOfProduct(randomByTraitLoose(["ego"])),
+        "rand": ["ego"],
+        "power": 2,
+        "exchange": [ {"trait": "emotion", "cost": 1} ],
+        "charges": 12,
+        "speed": 300,
+        "isActive": false,
+        "img": ""
+    },
 ]
+*/
+
+
+Products.forEach(item => {
+    item["img"] = "assets/db/items/" + item["name"] + ".png"
+})
 
 Demons.forEach(item => {
-    item["img"] = "assets/db/img/" + item["name"] + ".png"
+    item["img"] = "assets/db/demons/" + item["name"] + ".png"
+    item["product"] = instanceOfProduct(item["product"])
 })

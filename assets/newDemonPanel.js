@@ -1,81 +1,79 @@
 
 function newDemonPanel(x, y){
 
-    const newPanel = document.createElement("div")
-    const icon = document.createElement("img")
-    const title = document.createElement("span")
-    const kind = document.createElement("p")
-    const desc = document.createElement("div")
+    if( Player["Items"].length >= 12){
+        return
+    }else{
+        const newPanel = document.createElement("div")
+        const icon = document.createElement("img")
+        const title = document.createElement("span")
+        const kind = document.createElement("p")
+        const desc = document.createElement("div")
+    
+        const demon = Demons[Math.floor(Math.random() * Demons.length)]
+    
+        newPanel.classList.add("demon-panel")
+        icon.classList.add("demon-icon")
+        title.classList.add("demon-title")
+        kind.classList.add("demon-kind")
+        desc.classList.add("demon-abilities")
+    
+        icon.src = demon["img"]
+    
+        title.textContent = demon["name"]
+    
+        kind.textContent = demon["kind"]
+    
+        demonDescription = ""
+    
+        demonDescription += "Grants " + demon["tier"] + " " + demon["product"]["name"]
 
-    const demon = Demons[Math.floor(Math.random() * Demons.length)]
-
-    newPanel.classList.add("demon-panel")
-    icon.classList.add("demon-icon")
-    title.classList.add("demon-title")
-    kind.classList.add("demon-kind")
-    desc.classList.add("demon-abilities")
-
-    icon.src = demon["img"]
-
-    title.textContent = demon["name"]
-
-    kind.textContent = demon["kind"]
-
-    demonDescription = ""
-
-    demon["exchange"].forEach(item => {
-        if(item["product"] != null){
-            demonDescription += item["cost"] + " " + item["product"]
+    
+        desc.textContent = demonDescription
+    
+        newPanel.style.opacity = "0"
+    
+        newPanel.appendChild(icon)
+        newPanel.appendChild(title)
+        newPanel.appendChild(kind)
+        newPanel.appendChild(desc)
+    
+        document.body.appendChild(newPanel)
+    
+        var objLeft = x - Math.floor(newPanel.offsetWidth / 2)
+        var objTop = Math.floor(newPanel.offsetHeight / 6)
+    
+        if(objLeft < 10){
+            objLeft = 10
         }
-        if(item["trait"] != null){
-            demonDescription += item["cost"] + " " + item["trait"]
+    
+    
+    
+        if(objLeft + newPanel.offsetWidth > window.innerWidth){
+            objLeft = window.innerWidth - newPanel.offsetWidth - 10
         }
-    })
-
-    demonDescription += " => " + demon["power"] + " " + demon["product"]["name"]
-
-    desc.textContent = demonDescription
-
-    newPanel.style.opacity = "0"
-
-    newPanel.appendChild(icon)
-    newPanel.appendChild(title)
-    newPanel.appendChild(kind)
-    newPanel.appendChild(desc)
-
-    document.body.appendChild(newPanel)
-
-    var objLeft = x - Math.floor(newPanel.offsetWidth / 2)
-    var objTop = Math.floor(newPanel.offsetHeight / 6)
-
-    if(objLeft < 10){
-        objLeft = 10
+    
+    
+    
+    
+        newPanel.style.left = (objLeft) + "px"
+        newPanel.style.top = (objTop) + "px"
+    
+    
+        setTimeout(() => {
+    
+            newPanel.style.opacity = "1"
+    
+        },300)
+    
+        killAllStars()
+        loseLife(1)
+    
+        newBeckonButton(objLeft, objTop, newPanel, demon)
+        newDismissButton(objLeft, objTop, newPanel)
+        updateDemonsPanel()
     }
 
-
-
-    if(objLeft + newPanel.offsetWidth > window.innerWidth){
-        objLeft = window.innerWidth - newPanel.offsetWidth - 10
-    }
-
-
-
-
-    newPanel.style.left = (objLeft) + "px"
-    newPanel.style.top = (objTop) + "px"
-
-
-    setTimeout(() => {
-
-        newPanel.style.opacity = "1"
-
-    },300)
-
-    killAllStars()
-    loseLife(1)
-
-    newBeckonButton(objLeft, objTop, newPanel, demon)
-    newDismissButton(objLeft, objTop, newPanel)
 
 } 
 
@@ -183,10 +181,8 @@ function beckonDemon(demon){
 
 
     demonToPush["summonId"] = Date.now()
-    Player["Demons"].push(demonToPush)
+    Player["Items"].push(demonToPush)
     loseLife(demon["tier"])
-
-    updateDemonsPanel()
 
 }
 
@@ -194,8 +190,9 @@ function beckonDemon(demon){
 
 function loseLife(val){
 
-    Player["Products"][0]["count"] -= val
-    populateResourceBar()
+    Player["Life"] -= val
+    updateDemonsPanel()
+    //populateResourceBar()
 
 }
 

@@ -1,153 +1,121 @@
 var Player = {
-    "Demons": [],
-    "Products": [{"name": "Life", "type": "count", "count": 50, "traits": ["life"], "id": 0}, {"name": "Wroth", "type": "count", "count": 10, "traits": ["emotion", "id"],  "id": 23}]
+    "Items": [],
+    "Life": 50,
 }
-
-function populateResourceBar(){
-    const resourceBar = document.getElementById("player-resources")
-
-    while(resourceBar.firstChild){
-        resourceBar.firstChild.remove()
-    }
-
-    Player["Products"].forEach(item => {
-
-        const resourceItem = document.createElement("span")
-
-        resourceItem.id = item["id"] + "-item"
-        resourceItem.classList.add("resource")
-
-        resourceItem.textContent = item["name"] + ": " + item["count"]
-
-        resourceBar.appendChild(resourceItem)
-
-    })
-
-
+var CraftingSlots = {
+    "Slot1": 0,
+    "Slot2": 0,
+    "Result": 0
 }
 
 function updateDemonsPanel(){
     const playerPanel = document.getElementById("player-panel")
 
-    Player.Demons.forEach(item => {
+    Player["Items"].forEach(item => {
+        const thisItem = document.getElementById(item["summonId"])
 
-        const thisDemon = document.getElementById(item["summonId"])
+        if(item["type"] == "Demon"){
 
-        if(thisDemon === null){
-            const newDemon = document.createElement("div")
-            const icon = document.createElement("img")
-            const charges = document.createElement("div")
-    
-            newDemon.classList.add("demon-in-panel")
-            icon.classList.add("demon-in-panel-img")
-            charges.classList.add("demon-in-panel-charges")
-    
-            icon.src = item["img"]
-            charges.textContent = item["charges"]
-    
-            newDemon.appendChild(icon)
-            newDemon.appendChild(charges)
-    
-            newDemon.id = item["summonId"]
-            charges.id = "charges-" + item["summonId"]
+            if(thisItem === null){
+                const newDemon = document.createElement("div")
+                const icon = document.createElement("img")
+                const charges = document.createElement("div")
         
-            playerPanel.appendChild(newDemon)
-    
-            if(item["isActive"]){
-    
-                newDemon.style.scale = "0.95"
-                newDemon.style.filter = "brightness(0.7)"
-    
-            }
+                newDemon.classList.add("demon-in-panel")
+                icon.classList.add("demon-in-panel-img")
+                charges.classList.add("demon-in-panel-charges")
         
-            if(item["type"] === "Active"){
+                icon.src = item["img"]
+                //console.log(icon.src)
+
+                charges.textContent = item["charges"]
+        
+                newDemon.appendChild(icon)
+                newDemon.appendChild(charges)
+        
+                newDemon.id = item["summonId"]
+                charges.id = "charges-" + item["summonId"]
+            
+                playerPanel.appendChild(newDemon)
+
                 newDemon.addEventListener("click", () => { activateDemon(item) })
-            }
-    
-            newDemon.addEventListener("mouseover", () => {
-                showTooltip(item)
-            })
-    
-            newDemon.addEventListener("mouseout", () => {
-                document.querySelector(".tooltip-box").style.opacity = "0"
-            })
-    
-            if(item["charges"] <= 0){
-                newDemon.remove()
+        
+                newDemon.addEventListener("mouseover", () => {
+                    showTooltip(item)
+                })
+
+                newDemon.addEventListener("mouseout", () => {
+                    document.querySelector(".tooltip-box").style.opacity = "0"
+                })
             }
         }
-        else{
+
+        if(item["type"] == "Item"){
+
+            if(thisItem == null){
+                const newItem = document.createElement("div")
+                const icon = document.createElement("img")
+                const charges = document.createElement("div")
+        
+                newItem.classList.add("demon-in-panel", "item-in-panel")
+                icon.classList.add("demon-in-panel-img", "item-in-panel-img")
+                charges.classList.add("demon-in-panel-charges", "item-in-panel-charges")
+        
+                icon.src = item["img"]
+                //console.log(icon.src)
+                charges.textContent = item["charges"]
+        
+                newItem.appendChild(icon)
+                newItem.appendChild(charges)
+        
+                newItem.id = item["summonId"]
+                charges.id = "charges-" + item["summonId"]
             
-            const thisDemoncharges = document.getElementById("charges-" + item["summonId"])
-            thisDemoncharges.textContent = item["charges"]
+                playerPanel.appendChild(newItem)
 
-            if(item["charges"] <= 0){
-                thisDemon.remove()
+                newItem.addEventListener("mouseover", () => {
+                    showTooltip(item)
+                })
 
-                Player.Demons.splice(Player.Demons.indexOf(item), 1)
+                newItem.addEventListener("mouseout", () => {
+                    document.querySelector(".tooltip-box").style.opacity = "0"
+                })
 
-                document.querySelector(".tooltip-box").style.opacity = "0"
+                newItem.addEventListener("click", () => {
+                    addToCrafting(item)
+                })
+        
+                if(item["charges"] <= 0){
+                    newItem.remove()
+                }
+        
+            }
+            else{
+                
+                const thisItemCharges = document.getElementById("charges-" + item["summonId"])
+                thisItemCharges.textContent = item["charges"]
+    
+                if(item["charges"] <= 0){
+                    thisItem.remove()
+    
+                    Player["Items"].splice(Player["Items"].indexOf(item), 1)
+    
+                    document.querySelector(".tooltip-box").style.opacity = "0"
+                    
+                }
                 
             }
-            
-        }
-    })
-}
-
-function populateDemonsPanel(){
-    const playerPanel = document.getElementById("player-panel")
-
-    while(playerPanel.firstChild){
-        playerPanel.firstChild.remove()
-    }
 
 
-    Player.Demons.forEach(item => {
-
-        const newDemon = document.createElement("div")
-        const icon = document.createElement("img")
-        const charges = document.createElement("div")
-
-        newDemon.classList.add("demon-in-panel")
-        icon.classList.add("demon-in-panel-img")
-        charges.classList.add("demon-in-panel-charges")
-
-        icon.src = item["img"]
-        charges.textContent = item["charges"]
-
-        newDemon.appendChild(icon)
-        newDemon.appendChild(charges)
-
-        newDemon.id = item["summonId"]
-    
-        playerPanel.appendChild(newDemon)
-
-        if(item["isActive"]){
-
-            newDemon.style.scale = "0.95"
-            newDemon.style.filter = "brightness(0.7)"
-
-        }
-    
-        if(item["type"] === "Active"){
-            newDemon.addEventListener("click", () => { activateDemon(item) })
-        }
-
-        newDemon.addEventListener("mouseover", () => {
-            showTooltip(item)
-        })
-
-        newDemon.addEventListener("mouseout", () => {
-            document.querySelector(".tooltip-box").style.opacity = "0"
-        })
-
-        if(item["charges"] <= 0){
-            newDemon
         }
 
     })
 
-    
+    const lifeCounter = document.getElementById("life-counter")
+    lifeCounter.textContent = Player["Life"]
+
+
+
 }
 
 function tickDemon(demon){
@@ -187,7 +155,7 @@ function tickDemon(demon){
         }
 
         if(isDone){
-            console.log("done")
+            //console.log("done")
 
             killInterval(demon["summonId"])
 
@@ -225,16 +193,10 @@ function showTooltip(demon){
 
     var description = ""
 
-    demon["exchange"].forEach(item => {
-        if(item["product"] != null){
-            description += item["cost"] + " " + item["product"]
-        }
-        if(item["trait"] != null){
-            description += item["cost"] + " " + item["trait"]
-        }
-    })
+    if(demon["type"] == "Demon"){
+        description += "Grants " + demon["tier"] + " " + demon["product"]["name"]
 
-    description += " => " + demon["power"] + " " + demon["product"]["name"]
+    }
 
     demonDesc.textContent = description
 
@@ -267,5 +229,251 @@ function swapActivePanel(newPanel){
 
 }
 
+function withdrawFromCraftingSlot(slotItem, slot){
+
+    var hasItem = false
+
+    Player["Items"].forEach(item => {
+        if(item.summonId == slotItem.summonId){
+            item.charges += 1
+            hasItem = true
+        }
+    })
+
+    //console.log(hasItem)
+
+    if(!hasItem){
+        slotItem.charges = 1
+        Player["Items"].push(slotItem)
+    }
+
+    switch(slot){
+        case "Slot1":
+            while(document.getElementById("slot-1").firstChild){
+                document.getElementById("slot-1").firstChild.remove()
+            }
+            var clone = document.getElementById("slot-1").cloneNode(true)
+            document.getElementById("slot-1").parentNode.replaceChild(clone, document.getElementById("slot-1"))
+            CraftingSlots["Slot1"] = 0
+        break;
+        case "Slot2":
+            while(document.getElementById("slot-2").firstChild){
+                document.getElementById("slot-2").firstChild.remove()
+            }
+            var clone = document.getElementById("slot-2").cloneNode(true)
+            document.getElementById("slot-2").parentNode.replaceChild(clone, document.getElementById("slot-2"))
+            CraftingSlots["Slot2"] = 0
+        break;
+        case "Result":
+            while(document.getElementById("slot-3").firstChild){
+                document.getElementById("slot-3").firstChild.remove()
+            }
+            var clone = document.getElementById("slot-3").cloneNode(true)
+            document.getElementById("slot-3").parentNode.replaceChild(clone, document.getElementById("slot-3"))
+            CraftingSlots["Result"] = 0
+            break;
+    }
+    
+    updateDemonsPanel()
+
+
+}
+
+
+function addToCrafting(item){
+
+    //console.log(Player["Items"])
+
+    //TODO: Finish Crafting logic.
+
+    const slot1 = document.getElementById("slot-1")
+    const slot2 = document.getElementById("slot-2")
+    const slot3 = document.getElementById("slot-3")
+
+    var divToApp = document.createElement("div")
+    var itemImg = document.createElement("img")
+
+    itemImg.src = item["img"]
+
+    itemImg.classList.add("item-in-crafting-icon")
+    divToApp.classList.add("item-in-crafting")
+
+    divToApp.appendChild(itemImg)
+
+    if(!slot1.firstChild){
+        slot1.appendChild(divToApp)
+        CraftingSlots["Slot1"] = item
+
+        item.charges -= 1
+
+        slot1.addEventListener("click", () => { withdrawFromCraftingSlot(CraftingSlots["Slot1"], "Slot1") })
+
+    }else if(!slot2.firstChild){
+        slot2.appendChild(divToApp)
+        CraftingSlots["Slot2"] = item
+
+        slot2.addEventListener("click", () => { withdrawFromCraftingSlot(CraftingSlots["Slot2"], "Slot2") })
+
+
+        item.charges -= 1
+    }
+
+
+    if(CraftingSlots["Slot1"] != 0 && CraftingSlots["Slot2"] != 0){
+        craftItem()
+    }
+
+    updateDemonsPanel()
+
+}
+
+function arraysEqual(a, b) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+
+    for (var i = 0; i < a.length; ++i) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }
+
+function consumeCrafting(){
+
+    CraftingSlots["Slot1"] = 0
+    CraftingSlots["Slot2"] = 0
+
+    const slot1 = document.getElementById("slot-1")
+    const slot2 = document.getElementById("slot-2")
+
+    while(slot1.firstChild){
+        slot1.firstChild.remove()
+    }
+
+    while(slot2.firstChild){
+        slot2.firstChild.remove()
+    }
+
+
+
+}
+
+function craftItem(){
+
+    var craftingTraits = []
+
+    CraftingSlots["Slot1"]["traits"].forEach(trait => {
+        craftingTraits.push(trait)
+    })
+
+    CraftingSlots["Slot2"]["traits"].forEach(trait => {
+        craftingTraits.push(trait)
+    })
+
+
+    var resultSlot = document.getElementById("slot-3")
+
+    CraftingRecipes.forEach(recipe => {
+        if(arraysEqual(craftingTraits, recipe["recipe"])){
+
+            var item = instanceOfProduct(recipe["name"])
+
+            console.log(item)
+            
+            var divToApp = document.createElement("div")
+            var itemImg = document.createElement("img")
+        
+            itemImg.src = item["img"]
+        
+            itemImg.classList.add("item-in-crafting-icon")
+            divToApp.classList.add("item-in-crafting")
+
+            divToApp.appendChild(itemImg)
+
+
+            resultSlot.appendChild(divToApp)
+            CraftingSlots["Result"] = item
+        
+            resultSlot.addEventListener("click", () => { withdrawFromCraftingSlot(CraftingSlots["Result"], "Result"), consumeCrafting() })
+        
+        }
+    })
+
+}
+
 resetSky()
-populateResourceBar()
+//populateResourceBar()
+
+
+
+/* oldstuff
+
+
+function populateDemonsPanel(){
+    const playerPanel = document.getElementById("player-panel")
+
+    while(playerPanel.firstChild){
+        playerPanel.firstChild.remove()
+    }
+
+
+    Player["Items"].forEach(item => {
+
+        const newItem = document.createElement("div")
+        const icon = document.createElement("img")
+        const charges = document.createElement("div")
+
+        newItem.classList.add("demon-in-panel")
+        icon.classList.add("demon-in-panel-img")
+        charges.classList.add("demon-in-panel-charges")
+
+        icon.src = item["img"]
+        charges.textContent = item["charges"]
+
+        newItem.appendChild(icon)
+        newItem.appendChild(charges)
+
+        newItem.id = item["summonId"]
+    
+        playerPanel.appendChild(newItem)
+
+        if(item["type"] === "Demon"){
+            newItem.addEventListener("click", () => { activateDemon(item) })
+        }
+        newItem.addEventListener("mouseover", () => {
+            showTooltip(item)
+        })
+
+        newItem.addEventListener("mouseout", () => {
+            document.querySelector(".tooltip-box").style.opacity = "0"
+        })
+    })
+
+    
+}
+
+function populateResourceBar(){
+    const resourceBar = document.getElementById("player-resources")
+
+    while(resourceBar.firstChild){
+        resourceBar.firstChild.remove()
+    }
+
+    Player["Item"].forEach(item => {
+
+        const resourceItem = document.createElement("span")
+
+        resourceItem.id = item["id"] + "-item"
+        resourceItem.classList.add("resource")
+
+        resourceItem.textContent = item["name"] + ": " + item["count"]
+
+        resourceBar.appendChild(resourceItem)
+
+    })
+
+
+}
+
+
+*/

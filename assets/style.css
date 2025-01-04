@@ -365,3 +365,110 @@ table {
     filter: opacity(0.5);
 
 }
+
+.upper-menu{
+    height: 8vw;
+    width: 35vw;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 100%;
+    
+    background-color: transparent;
+    border: 0.1em solid white;
+    border-radius: 1%;
+    gap: 0.1em;
+    padding: 0.1em;
+
+}
+
+.life-container{
+
+    width: 98%;
+    height: 98%;
+
+    background-color: transparent;
+    border: 0.1em solid white;
+    border-radius: 1%;
+    gap: 0.1em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.life-count{
+
+    width: 100%;
+    height: fit-content;
+
+    background-color: transparent;
+    color: yellow;
+    font-size: xx-large;
+
+    text-align: center;
+}
+
+.crafting-container{
+    width: 98.5%;
+    height: 98%;
+
+    background-color: transparent;
+    gap: 0.1em;
+    padding-left: 1%;
+    border: 0.1em solid grey;
+
+    grid-column: 2 / 5;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 100%;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.crafting-slot{
+    width: 90%;
+    height: 90%;
+
+    background-color: transparent;
+    border: 0.15em outset white;
+    gap: 0.1em;
+    margin-left: 3%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reward-slot{
+    border: 0.1em solid grey;
+    width: 90%;
+    height: 90%;
+    margin-left: 5%;
+    
+}
+
+.item-in-crafting{
+
+    width: 100%;
+    height: 100%;
+
+    background-color: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.item-in-crafting-icon{
+    width: fit-content;
+    height: 90%;
+
+    justify-self: center;
+    align-self: center;
+
+}
