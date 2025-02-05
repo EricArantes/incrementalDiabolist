@@ -472,3 +472,20 @@ table {
     align-self: center;
 
 }
+
+.infernal-gate{
+    width: 8em;
+    height: 8em;
+
+    border: 2px solid white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+
+    right: 8em;
+    top: calc(25vh + 4em);
+
+}

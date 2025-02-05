@@ -8,8 +8,14 @@ var CraftingSlots = {
     "Result": 0
 }
 
+var Gate = {
+    "ActiveKey": ""
+}
+
 function updateDemonsPanel(){
     const playerPanel = document.getElementById("player-panel")
+
+    //console.log(Player)
 
     Player["Items"].forEach(item => {
         const thisItem = document.getElementById(item["summonId"])
@@ -242,49 +248,98 @@ function withdrawFromCraftingSlot(slotItem, slot){
 
     //console.log(hasItem)
 
-    if(!hasItem){
-        slotItem.charges = 1
-        Player["Items"].push(slotItem)
+    if(Player["Items"].length >= 12 && !hasItem){
+        return
+    }else{
+        if(!hasItem){
+            slotItem.charges = 1
+            Player["Items"].push(slotItem)
+        }
+
+        switch(slot){
+            case "Slot1":
+                while(document.getElementById("slot-1").firstChild){
+                    document.getElementById("slot-1").firstChild.remove()
+                }
+                var clone = document.getElementById("slot-1").cloneNode(true)
+                document.getElementById("slot-1").parentNode.replaceChild(clone, document.getElementById("slot-1"))
+                CraftingSlots["Slot1"] = 0
+            break;
+            case "Slot2":
+                while(document.getElementById("slot-2").firstChild){
+                    document.getElementById("slot-2").firstChild.remove()
+                }
+                var clone = document.getElementById("slot-2").cloneNode(true)
+                document.getElementById("slot-2").parentNode.replaceChild(clone, document.getElementById("slot-2"))
+                CraftingSlots["Slot2"] = 0
+            break;
+        }
+    
+        while(document.getElementById("slot-3").firstChild){
+            document.getElementById("slot-3").firstChild.remove()
+        }
+        var clone = document.getElementById("slot-3").cloneNode(true)
+        document.getElementById("slot-3").parentNode.replaceChild(clone, document.getElementById("slot-3"))
+        CraftingSlots["Result"] = 0
+        
+
+
+        updateDemonsPanel()
     }
 
-    switch(slot){
-        case "Slot1":
-            while(document.getElementById("slot-1").firstChild){
-                document.getElementById("slot-1").firstChild.remove()
-            }
-            var clone = document.getElementById("slot-1").cloneNode(true)
-            document.getElementById("slot-1").parentNode.replaceChild(clone, document.getElementById("slot-1"))
-            CraftingSlots["Slot1"] = 0
-        break;
-        case "Slot2":
-            while(document.getElementById("slot-2").firstChild){
-                document.getElementById("slot-2").firstChild.remove()
-            }
-            var clone = document.getElementById("slot-2").cloneNode(true)
-            document.getElementById("slot-2").parentNode.replaceChild(clone, document.getElementById("slot-2"))
-            CraftingSlots["Slot2"] = 0
-        break;
-        case "Result":
-            while(document.getElementById("slot-3").firstChild){
-                document.getElementById("slot-3").firstChild.remove()
-            }
-            var clone = document.getElementById("slot-3").cloneNode(true)
-            document.getElementById("slot-3").parentNode.replaceChild(clone, document.getElementById("slot-3"))
-            CraftingSlots["Result"] = 0
-            break;
+    if(findKeysInInv()){
+        spawnGate()
     }
+
     
-    updateDemonsPanel()
+
+
+}
+
+function findKeysInInv(){
+
+    var keyFound = false
+
+    if(Player["Items"].length > 0){
+        Player["Items"].forEach(item => {
+            if(item["traits"]){
+                item["traits"].forEach(trait => {
+                    if(trait == "key"){
+                        keyFound = item
+                    }
+                })
+            }
+
+
+        })
+    }
+
+
+
+    return keyFound
+}
+
+function spawnGate(){
+
+    if(document.querySelector("infernal-gate") == null){
+        var gate = document.createElement("div")
+
+        gate.classList.add("infernal-gate")
+    
+        document.body.appendChild(gate)
+    }
+}
+
+function selectKey(){
+
+    const gate = document.querySelector("infernal-gate")
+    
 
 
 }
 
 
 function addToCrafting(item){
-
-    //console.log(Player["Items"])
-
-    //TODO: Finish Crafting logic.
 
     const slot1 = document.getElementById("slot-1")
     const slot2 = document.getElementById("slot-2")
@@ -336,7 +391,7 @@ function arraysEqual(a, b) {
       if (a[i] !== b[i]) return false;
     }
     return true;
-  }
+}
 
 function consumeCrafting(){
 
@@ -361,6 +416,7 @@ function consumeCrafting(){
 function craftItem(){
 
     var craftingTraits = []
+    var tooManyKeys = false
 
     CraftingSlots["Slot1"]["traits"].forEach(trait => {
         craftingTraits.push(trait)
@@ -378,24 +434,46 @@ function craftItem(){
 
             var item = instanceOfProduct(recipe["name"])
 
-            console.log(item)
+            item["traits"].forEach(trait => {
+                if(trait == "key"){
+
+                    Player["Items"].forEach(item => {
+                        item["traits"].forEach(trait => {
+                            if(trait == "key"){
+                                console.log("cannot craft more than one key")
+                                tooManyKeys = true
+                            }
+                        })
+                    })
+
+                }
+            })
+
+            if(!tooManyKeys){
+                //console.log(item)
+                
+                var divToApp = document.createElement("div")
+                var itemImg = document.createElement("img")
             
-            var divToApp = document.createElement("div")
-            var itemImg = document.createElement("img")
-        
-            itemImg.src = item["img"]
-        
-            itemImg.classList.add("item-in-crafting-icon")
-            divToApp.classList.add("item-in-crafting")
+                itemImg.src = item["img"]
+            
+                itemImg.classList.add("item-in-crafting-icon")
+                divToApp.classList.add("item-in-crafting")
 
-            divToApp.appendChild(itemImg)
+                divToApp.appendChild(itemImg)
 
 
-            resultSlot.appendChild(divToApp)
-            CraftingSlots["Result"] = item
-        
-            resultSlot.addEventListener("click", () => { withdrawFromCraftingSlot(CraftingSlots["Result"], "Result"), consumeCrafting() })
-        
+                resultSlot.appendChild(divToApp)
+                CraftingSlots["Result"] = item
+            
+                resultSlot.addEventListener("click", () => { withdrawFromCraftingSlot(CraftingSlots["Result"], "Result"), consumeCrafting() })
+            }else{
+                CraftingSlots["Slot1"]["traits"] = []
+                
+                CraftingSlots["Slot2"]["traits"] = []
+            }
+
+
         }
     })
 
